@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="./output.css" rel="stylesheet">
+</head>
+
+<body class=" flex flex-col justify-center items-center w-full h-dvh bg-slate-900 text-white " id="body">
+    <h1>Paste a link here:</h1>
+    <section id="title_section" class="flex ">
+        <input id="youtube_link" type="text" class="text-black mr-4 ">
+        <button id="youtube_link_btn" class="border-solid border-white border-2 px-4 rounded-md">TAP</button>
+    </section>
+    <div id="player"></div>
+    <button id="add-timestamp-btn">ADD THINGY</button>
+    <section id="timestamps">
+        <!-- Timstamps list will go there -->
+
+    </section>
+    <script>
+        function removeClass(element, classStr) {
+            element.className = (' ' + element.className + ' ').split(' ' + classStr + ' ').join(' ');
+        }
+        function addClass(element, classStr) {
+            element.className += ' ' + classStr;
+        }
+
+        function youtube_parser(url) {
+            var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+            var match = url.match(regExp);
+            return (match && match[7].length == 11) ? match[7] : false;
+        }
+
+        var tag = document.createElement('script');
+        const setVideoBtn = document.getElementById('youtube_link_btn')
+        setVideoBtn.addEventListener('click', () => {
+            const linkInput = document.getElementById('youtube_link')
+            linkValue = linkInput.value
+//            console.log(`PLayer state: ${player.getPlayerState()} Id of the video: ${youtube_parser(linkValue)} Current time: ${player.getCurrentTime()}`)
+            player.cueVideoById(youtube_parser(linkValue), 0)
+
+            player.pauseVideo()
+        })
+
+        //BUTTON TO ADD A NEW TIMESTAMP
+        const addTimestampBtn = document.getElementById('add-timestamp-btn')
+        addTimestampBtn.addEventListener('click', () => {
+            const timestampList = document.getElementById('timestamps')
+            const newTimestamp = document.createElement('div')
+            const timestampName = document.createElement('h2')
+            timestampName.textContent = player.getCurrentTime()
+            const startBtn = document.createElement('button')
+            const pauseBtn = document.createElement('button')
+            const deleteBtn = document.createElement('button')
+            startBtn.textContent = '>'
+            pauseBtn.textContent = '||'
+            deleteBtn.textContent = 'X'            
+            newTimestamp.appendChild(timestampName)
+            newTimestamp.appendChild(startBtn)
+            newTimestamp.appendChild(pauseBtn)
+            newTimestamp.appendChild(deleteBtn)
+            addClass(newTimestamp, 'flex')
+
+            newTimestamp.id = 'timestamp' + timestampList.childElementCount
+
+            timestampList.appendChild(newTimestamp)
+        })
+
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '390',
+                width: '640',
+                videoId: '',
+                playerVars: {
+                    'playsinline': 1,
+                    'enablejsapi': 1,
+                    'fs': 0
+
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onError
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+
+        }
+        function onError(event){
+            console.log(event.data)
+        }
+        // 5. The API calls this function when the player's state changes.
+        //    The function indicates that when playing a video (state=1),
+        //    the player should play for six seconds and then stop.
+        var done = false;
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING && !done) {
+                setTimeout(stopVideo, 6000);
+                done = true;
+            }
+        }
+        function stopVideo() {
+            player.stopVideo();
+        }
+    </script>
+</body>
+
+</html>
