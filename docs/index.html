@@ -8,18 +8,28 @@
     <link href="./output.css" rel="stylesheet">
 </head>
 
-<body class=" flex flex-col justify-center items-center w-full h-dvh bg-slate-900 text-white " id="body">
-    <h1>Paste a link here:</h1>
-    <section id="title_section" class="flex ">
-        <input id="youtube_link" type="text" class="text-black mr-4 ">
-        <button id="youtube_link_btn" class="border-solid border-white border-2 px-4 rounded-md">TAP</button>
-    </section>
-    <div id="player"></div>
-    <button id="add-timestamp-btn">ADD THINGY</button>
-    <section id="timestamps">
-        <!-- Timstamps list will go there -->
-
-    </section>
+<body class=" flex justify-center items-center w-full bg-slate-900 text-white " id="body">
+    <div class="grid grid-rows-layoutPassive h-dvh " id="layout" >
+        <section id="title_section" class="self-end">
+            <h1 class="block" >Paste a link here:</h1>
+            <input id="youtube_link" type="text" class="text-black mr-4 ">
+            <button id="youtube_link_btn" class="border-solid border-white border-2 px-4 rounded-md font-bold 
+            bg-gradient-to-r from-purple-500 to-pink-500">TAP</button>
+        </section>
+        <section id="player-section" class="flex flex-col items-center" >
+            <div id="player"></div>
+            <div id="menu" class="flex items-center mt-2 ">
+    
+                <div id="controls" >
+                
+                </div>
+            </div>
+        </section>
+        <section id="timestamps" class=" h-full scrollbar-thin scrollbar-thumb-custom-scrollThumb scrollbar-thumb-rounded-full scrollbar-track-custom-scrollBg w-full] overflow-x-hidden overflow-y-auto" >
+            <!-- Timstamps list will go there -->
+    
+        </section>
+    </div>
     <script>
         function removeClass(element, classStr) {
             element.className = (' ' + element.className + ' ').split(' ' + classStr + ' ').join(' ');
@@ -35,32 +45,128 @@
         }
 
         var tag = document.createElement('script');
+        const timestampList = document.getElementById('timestamps')
+        const menu = document.getElementById('menu')
+        const controls = document.getElementById('controls')
+
+        //BUTTON TO SET THE LINK OF THE VIDEO
         const setVideoBtn = document.getElementById('youtube_link_btn')
         setVideoBtn.addEventListener('click', () => {
+            const layout = document.getElementById('layout')
             const linkInput = document.getElementById('youtube_link')
             linkValue = linkInput.value
-//            console.log(`PLayer state: ${player.getPlayerState()} Id of the video: ${youtube_parser(linkValue)} Current time: ${player.getCurrentTime()}`)
-            player.cueVideoById(youtube_parser(linkValue), 0)
 
+            player.cueVideoById(youtube_parser(linkValue), 0)
             player.pauseVideo()
+
+            const videoPlayer = document.getElementById('player')
+            removeClass(videoPlayer, 'hidden')
+            addClass(videoPlayer, 'block')
+
+            removeClass(layout, 'grid-rows-layoutPassive')
+            addClass(layout, 'grid-rows-layoutActive')
+
         })
 
+        
+        
+        
+
         //BUTTON TO ADD A NEW TIMESTAMP
-        const addTimestampBtn = document.getElementById('add-timestamp-btn')
+        const addTimestampBtn = document.createElement('button')
+        addTimestampBtn.id = 'add-timestamp-btn'
+        addTimestampBtn.textContent = 'ADD THINGY'
+        menu.insertBefore(addTimestampBtn, menu.firstChild);
+        addClass(addTimestampBtn, 'hidden p-4 border-solid border-2 border-white rounded-md font-bold text-lg bg-gradient-to-r from-purple-500 to-pink-500 ')
         addTimestampBtn.addEventListener('click', () => {
-            const timestampList = document.getElementById('timestamps')
+            //creating the timestamp
             const newTimestamp = document.createElement('div')
-            const timestampName = document.createElement('h2')
-            timestampName.textContent = player.getCurrentTime()
-            const startBtn = document.createElement('button')
-            const pauseBtn = document.createElement('button')
+            const currentTime = player.getCurrentTime()
+
+            //creating elements to fill the timestamp
+            const timestampName = document.createElement('input')
+            const startBtn = document.createElement('input')
+            const pauseBtn = document.createElement('input')
             const deleteBtn = document.createElement('button')
-            startBtn.textContent = '>'
-            pauseBtn.textContent = '||'
-            deleteBtn.textContent = 'X'            
+            const timestampMinuttes = Math.floor(Math.floor(currentTime)/60) 
+            const timestampSeconds = Math.floor(currentTime) % 60
+
+            //setting nae of the timestamp to the current time
+            timestampName.value = `${Math.floor(currentTime/60)}:${((currentTime % 60) < 10)?'0':''}${(currentTime % 60).toFixed(0)}`
+           
+            //creating radio group for play/pause btn
+            const radioGroup = document.createElement('fieldset')
+
+            //start button setup
+            const radioStart = document.createElement('div')
+            const startLabel = document.createElement('label')
+            startLabel.setAttribute('for', 'startBtn')
+            addClass(startLabel,"w-[2em] h-[2em] bg-playButton bg-cover bg-no-repeat bg-center")
+            startLabel.style.filter = "brightness(0) saturate(100%) invert(96%) sepia(27%) saturate(5690%) hue-rotate(67deg) brightness(98%) contrast(93%)"
+            startBtn.id = 'startBtn'
+            startBtn.setAttribute('type', 'radio')
+            startBtn.setAttribute('name', 'timestamp_controls')
+
+            //pause button setup
+            const radioPause = document.createElement('div')
+            const pauseLabel = document.createElement('label')
+            pauseLabel.setAttribute('for', 'pauseBtn')
+            addClass(pauseLabel,"w-[2em] h-[2em] bg-stopButton bg-cover bg-no-repeat bg-center")
+            pauseLabel.style.filter = " brightness(0) saturate(100%) invert(40%) sepia(77%) saturate(1186%) hue-rotate(320deg) brightness(101%) contrast(88%)"
+            pauseBtn.id = 'pauseBtn'
+            pauseBtn.setAttribute('type', 'radio')
+            pauseBtn.setAttribute('name', 'timestamp_controls')
+
+
+            radioGroup.appendChild(startLabel)
+            radioGroup.appendChild(startBtn)
+            radioGroup.appendChild(pauseLabel)
+            radioGroup.appendChild(pauseBtn)
+
+
+            
+            
+
+            addClass(deleteBtn,"self-center justify-self-center w-[2em] h-[2em] bg-deleteBtn bg-cover bg-no-repeat bg-center")
+            deleteBtn.style.filter = "brightness(0) saturate(100%) invert(15%) sepia(76%) saturate(6823%) hue-rotate(345deg) brightness(95%) contrast(112%)"
+
+
+            //adding styles to elements
+            addClass(newTimestamp, ' grid grid-flow-col auto-cols-auto mt-2 h-[5em] w-full text-lg font-bold border-solid border-2 border-white p-2 rounded-md')
+            addClass(timestampName, 'text-3xl bg-transparent border-none justify-self-start')
+            addClass(radioGroup, 'flex justify-end items-center')
+            addClass(startBtn, 'hidden')
+            addClass(pauseBtn, 'hidden')
+            addClass(startLabel, '')
+            addClass(pauseLabel, 'hidden')
+            addClass(deleteBtn, '')
+            startBtn.addEventListener('change', () => {
+                addClass(startLabel, 'hidden')
+                removeClass(pauseLabel, 'hidden')
+                addClass(pauseLabel, 'block')
+            })
+            pauseBtn.addEventListener('change', () => {
+                addClass(startLabel, 'block')
+                removeClass(startLabel, 'hidden')
+                addClass(pauseLabel, 'hidden')
+            })
+
+
+            //adding event handlers to controls
+            startBtn.addEventListener('click', () => {
+                player.seekTo(currentTime)
+                player.playVideo()
+            })
+            pauseBtn.addEventListener('click', () => {
+                player.pauseVideo()
+            })
+            deleteBtn.addEventListener('click', () => {
+                timestampList.removeChild(newTimestamp)
+            })
+
+            //filling the timestamp with element        
             newTimestamp.appendChild(timestampName)
-            newTimestamp.appendChild(startBtn)
-            newTimestamp.appendChild(pauseBtn)
+            newTimestamp.appendChild(radioGroup)
             newTimestamp.appendChild(deleteBtn)
             addClass(newTimestamp, 'flex')
 
@@ -75,7 +181,6 @@
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         var player;
-
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
@@ -96,21 +201,40 @@
             });
         }
 
-        function onPlayerReady(event) {
 
+
+
+        function onPlayerReady(event) {
+            const videoPlayer = document.getElementById('player')
+            if (setVideoBtn.value == "")
+                addClass(videoPlayer, 'hidden')
+            else addClass(videoPlayer, 'block')
         }
-        function onError(event){
+        function onError(event) {
             console.log(event.data)
         }
         // 5. The API calls this function when the player's state changes.
         //    The function indicates that when playing a video (state=1),
         //    the player should play for six seconds and then stop.
         var done = false;
+
+
         function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING && !done) {
-                setTimeout(stopVideo, 6000);
-                done = true;
-            }
+            removeClass(addTimestampBtn, 'hidden')
+            addClass(addTimestampBtn, 'block')
+            //POPULATING PLAYBACK RATE BUTTONS
+            const playbackRateList = player.getAvailablePlaybackRates()
+            controls.innerHTML = ""
+            playbackRateList.map((pbr) => {
+                const newPbrBtn = document.createElement('button')
+                newPbrBtn.textContent = `x${pbr}`
+                newPbrBtn.addEventListener('click', () => {
+                    player.setPlaybackRate(pbr)
+                })
+                addClass(newPbrBtn, 'p-3 mx-1 border-2 border-solid border-white rounded-md')
+                controls.appendChild(newPbrBtn)
+            })
+
         }
         function stopVideo() {
             player.stopVideo();
