@@ -9,25 +9,28 @@
 </head>
 
 <body class=" flex justify-center items-center w-full bg-slate-900 text-white " id="body">
-    <div class="grid grid-rows-layoutPassive h-dvh " id="layout" >
-        <section id="title_section" class="self-end">
-            <h1 class="block" >Paste a link here:</h1>
-            <input id="youtube_link" type="text" class="text-black mr-4 ">
-            <button id="youtube_link_btn" class="border-solid border-white border-2 px-4 rounded-md font-bold 
+    <div class="grid grid-rows-layoutPassive h-dvh " id="layout">
+        <section id="title_section" class="flex flex-col justify-center self-end w-full justify-self-center px-4 mt-1">
+            <h1 class="block " id="youtube_link_title">Paste a link here:</h1>
+            <div class="flex w-full justify-center"  >
+                <input id="youtube_link" type="text" class="text-black mr-4 grow text-2xl bg-slate-700 text-white">
+                <button id="youtube_link_btn" class="border-solid border-white border-2 px-4 rounded-md font-bold 
             bg-gradient-to-r from-purple-500 to-pink-500">TAP</button>
+            </div>
         </section>
-        <section id="player-section" class="flex flex-col items-center" >
+        <section id="player-section" class="flex flex-col items-center">
             <div id="player"></div>
             <div id="menu" class="flex justify-center items-center mt-2 pl-2 ">
-    
-                <div id="controls" >
-                
+
+                <div id="controls">
+
                 </div>
             </div>
         </section>
-        <section id="timestamps" class=" w-full h-full scrollbar-thin scrollbar-thumb-custom-scrollThumb scrollbar-thumb-rounded-full scrollbar-track-custom-scrollBg overflow-x-hidden overflow-y-auto" >
+        <section id="timestamps"
+            class=" w-full h-full scrollbar-thin scrollbar-thumb-custom-scrollThumb scrollbar-thumb-rounded-full scrollbar-track-custom-scrollBg overflow-x-hidden overflow-y-auto">
             <!-- Timstamps list will go there -->
-    
+
         </section>
     </div>
     <script>
@@ -66,11 +69,13 @@
             removeClass(layout, 'grid-rows-layoutPassive')
             addClass(layout, 'grid-rows-layoutActive')
 
+            addClass(document.getElementById('youtube_link_title'), 'hidden')
+
         })
 
-        
-        
-        
+
+
+
 
         //BUTTON TO ADD A NEW TIMESTAMP
         const addTimestampBtn = document.createElement('button')
@@ -82,6 +87,7 @@
             //vibrating on click
             window.navigator.vibrate(100)
 
+
             //creating the timestamp
             const newTimestamp = document.createElement('div')
             const currentTime = player.getCurrentTime()
@@ -91,12 +97,12 @@
             const startBtn = document.createElement('input')
             const pauseBtn = document.createElement('input')
             const deleteBtn = document.createElement('button')
-            const timestampMinuttes = Math.floor(Math.floor(currentTime)/60) 
+            const timestampMinuttes = Math.floor(Math.floor(currentTime) / 60)
             const timestampSeconds = Math.floor(currentTime) % 60
 
             //setting nae of the timestamp to the current time
-            timestampName.value = `${Math.floor(currentTime/60)}:${((currentTime % 60) < 10)?'0':''}${(currentTime % 60).toFixed(0)}`
-           
+            timestampName.value = `${Math.floor(currentTime / 60)}:${((currentTime % 60) < 10) ? '0' : ''}${(currentTime % 60).toFixed(0)}`
+
             //creating radio group for play/pause btn
             const radioGroup = document.createElement('fieldset')
 
@@ -104,7 +110,7 @@
             const radioStart = document.createElement('div')
             const startLabel = document.createElement('label')
             startLabel.setAttribute('for', 'startBtn')
-            addClass(startLabel,"w-[2em] h-[2em] bg-playButton bg-cover bg-no-repeat bg-center")
+            addClass(startLabel, "w-[2em] h-[2em] bg-playButton bg-cover bg-no-repeat bg-center")
             startLabel.style.filter = "brightness(0) saturate(100%) invert(96%) sepia(27%) saturate(5690%) hue-rotate(67deg) brightness(98%) contrast(93%)"
             startBtn.id = 'startBtn'
             startBtn.setAttribute('type', 'radio')
@@ -114,7 +120,7 @@
             const radioPause = document.createElement('div')
             const pauseLabel = document.createElement('label')
             pauseLabel.setAttribute('for', 'pauseBtn')
-            addClass(pauseLabel,"w-[2em] h-[2em] bg-stopButton bg-cover bg-no-repeat bg-center")
+            addClass(pauseLabel, "w-[2em] h-[2em] bg-stopButton bg-cover bg-no-repeat bg-center")
             pauseLabel.style.filter = " brightness(0) saturate(100%) invert(40%) sepia(77%) saturate(1186%) hue-rotate(320deg) brightness(101%) contrast(88%)"
             pauseBtn.id = 'pauseBtn'
             pauseBtn.setAttribute('type', 'radio')
@@ -127,10 +133,10 @@
             radioGroup.appendChild(pauseBtn)
 
 
-            
-            
 
-            addClass(deleteBtn,"self-center justify-self-center w-[2em] h-[2em] bg-deleteBtn bg-cover bg-no-repeat bg-center")
+
+
+            addClass(deleteBtn, "self-center justify-self-center w-[2em] h-[2em] bg-deleteBtn bg-cover bg-no-repeat bg-center")
             deleteBtn.style.filter = "brightness(0) saturate(100%) invert(15%) sepia(76%) saturate(6823%) hue-rotate(345deg) brightness(95%) contrast(112%)"
 
 
