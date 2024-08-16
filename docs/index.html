@@ -84,6 +84,8 @@
         menu.insertBefore(addTimestampBtn, menu.firstChild);
         addClass(addTimestampBtn, 'hidden p-4 border-solid border-2 border-white rounded-md font-bold text-lg bg-gradient-to-r from-purple-500 to-pink-500 ')
         addTimestampBtn.addEventListener('click', () => {
+            const idExtender = Math.floor(Math.random() * (500000 - 0) + 0)
+            console.log(idExtender)
             //vibrating on click
             window.navigator.vibrate(100)
 
@@ -109,20 +111,20 @@
             //start button setup
             const radioStart = document.createElement('div')
             const startLabel = document.createElement('label')
-            startLabel.setAttribute('for', 'startBtn')
+            startLabel.setAttribute('for', `startBtn${idExtender}`)
             addClass(startLabel, "w-[2em] h-[2em] bg-playButton bg-cover bg-no-repeat bg-center")
             startLabel.style.filter = "brightness(0) saturate(100%) invert(96%) sepia(27%) saturate(5690%) hue-rotate(67deg) brightness(98%) contrast(93%)"
-            startBtn.id = 'startBtn'
+            startBtn.id = 'startBtn'+idExtender
             startBtn.setAttribute('type', 'radio')
             startBtn.setAttribute('name', 'timestamp_controls')
 
             //pause button setup
             const radioPause = document.createElement('div')
             const pauseLabel = document.createElement('label')
-            pauseLabel.setAttribute('for', 'pauseBtn')
+            pauseLabel.setAttribute('for', `pauseBtn${idExtender}`)
             addClass(pauseLabel, "w-[2em] h-[2em] bg-stopButton bg-cover bg-no-repeat bg-center")
             pauseLabel.style.filter = " brightness(0) saturate(100%) invert(40%) sepia(77%) saturate(1186%) hue-rotate(320deg) brightness(101%) contrast(88%)"
-            pauseBtn.id = 'pauseBtn'
+            pauseBtn.id = 'pauseBtn'+idExtender
             pauseBtn.setAttribute('type', 'radio')
             pauseBtn.setAttribute('name', 'timestamp_controls')
 
@@ -163,6 +165,7 @@
 
             //adding event handlers to controls
             startBtn.addEventListener('click', () => {
+                console.log(`Child ${idExtender} fired, current time: ${currentTime}`)
                 player.seekTo(currentTime)
                 player.playVideo()
             })
@@ -179,7 +182,7 @@
             newTimestamp.appendChild(deleteBtn)
             addClass(newTimestamp, 'flex')
 
-            newTimestamp.id = 'timestamp' + timestampList.childElementCount
+            newTimestamp.id = 'timestamp' + idExtender
 
             timestampList.appendChild(newTimestamp)
         })
