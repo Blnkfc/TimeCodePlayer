@@ -18,14 +18,14 @@
         </section>
         <section id="player-section" class="flex flex-col items-center" >
             <div id="player"></div>
-            <div id="menu" class="flex items-center mt-2 ">
+            <div id="menu" class="flex justify-center items-center mt-2 pl-2 ">
     
                 <div id="controls" >
                 
                 </div>
             </div>
         </section>
-        <section id="timestamps" class=" h-full scrollbar-thin scrollbar-thumb-custom-scrollThumb scrollbar-thumb-rounded-full scrollbar-track-custom-scrollBg w-full] overflow-x-hidden overflow-y-auto" >
+        <section id="timestamps" class=" w-full h-full scrollbar-thin scrollbar-thumb-custom-scrollThumb scrollbar-thumb-rounded-full scrollbar-track-custom-scrollBg overflow-x-hidden overflow-y-auto" >
             <!-- Timstamps list will go there -->
     
         </section>
@@ -132,12 +132,12 @@
 
 
             //adding styles to elements
-            addClass(newTimestamp, ' grid grid-flow-col auto-cols-auto mt-2 h-[5em] w-full text-lg font-bold border-solid border-2 border-white p-2 rounded-md')
-            addClass(timestampName, 'text-3xl bg-transparent border-none justify-self-start')
+            addClass(newTimestamp, ' flex gap-2 mt-2 h-[5em] w-full text-lg font-bold border-solid border-2 border-white p-2 rounded-md')
+            addClass(timestampName, ' shrink w-full text-3xl bg-transparent border-none justify-self-start')
             addClass(radioGroup, 'flex justify-end items-center')
             addClass(startBtn, 'hidden')
             addClass(pauseBtn, 'hidden')
-            addClass(startLabel, '')
+            addClass(startLabel, 'mr-4')
             addClass(pauseLabel, 'hidden')
             addClass(deleteBtn, '')
             startBtn.addEventListener('change', () => {
@@ -184,8 +184,8 @@
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('player', {
-                height: '390',
-                width: '640',
+                height: '200',
+                width: '340',
                 videoId: '',
                 playerVars: {
                     'playsinline': 1,
