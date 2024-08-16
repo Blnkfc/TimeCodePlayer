@@ -79,6 +79,9 @@
         menu.insertBefore(addTimestampBtn, menu.firstChild);
         addClass(addTimestampBtn, 'hidden p-4 border-solid border-2 border-white rounded-md font-bold text-lg bg-gradient-to-r from-purple-500 to-pink-500 ')
         addTimestampBtn.addEventListener('click', () => {
+            //vibrating on click
+            window.navigator.vibrate(100)
+
             //creating the timestamp
             const newTimestamp = document.createElement('div')
             const currentTime = player.getCurrentTime()
