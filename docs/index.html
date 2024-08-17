@@ -8,8 +8,8 @@
     <link href="./output.css" rel="stylesheet">
 </head>
 
-<body class=" flex justify-center items-center w-full bg-slate-900 text-white " id="body">
-    <div class="grid grid-rows-layoutPassive h-dvh " id="layout">
+<body class=" overflow-hidden  w-full bg-slate-900 text-white " id="body">
+    <div class="grid grid-rows-layoutPassive h-dvh  w-full" id="layout">
         <section id="title_section" class="flex flex-col justify-center self-end w-full justify-self-center px-4 mt-1">
             <h1 class="block " id="youtube_link_title">Paste a link here:</h1>
             <div class="flex w-full justify-center"  >
@@ -20,7 +20,7 @@
         </section>
         <section id="player-section" class="flex flex-col items-center">
             <div id="player"></div>
-            <div id="menu" class="flex justify-center items-center mt-2 pl-2 ">
+            <div id="menu" class="flex justify-center items-center p-2 ">
 
                 <div id="controls">
 
@@ -165,9 +165,29 @@
 
             //adding event handlers to controls
             startBtn.addEventListener('click', () => {
-                console.log(`Child ${idExtender} fired, current time: ${currentTime}`)
+                const list = [...timestampList.children]
                 player.seekTo(currentTime)
                 player.playVideo()
+                list.map((t) => {
+                    if(t.id != `timestamp${idExtender}`){
+                        const tlist = [...t.children]
+                        tlist.map((tc)=>{
+                            if(tc.nodeName == 'FIELDSET'){
+                                const tclist = [...tc.children]
+                                tclist.map((tcc) => {
+                                    if(JSON.stringify(tcc.htmlFor)?.includes('startBtn')){
+                                        removeClass(tcc, 'hidden')
+                                        addClass(tcc, 'block')
+                                    }else if(JSON.stringify(tcc.htmlFor)?.includes('pauseBtn')){
+                                        removeClass(tcc, 'block')
+                                        addClass(tcc, 'hidden')
+                                    }
+                                })
+                            }
+                        })
+                    }
+                    console.log('no')
+                })
             })
             pauseBtn.addEventListener('click', () => {
                 player.pauseVideo()
