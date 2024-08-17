@@ -17,6 +17,17 @@ module.exports = {
       gridTemplateRows:{
         'layoutActive': "auto auto 1fr",
         'layoutPassive': "1fr auto 1fr"
+      },
+      keyframes:{
+        appear: {
+          '0%': {transform: 'translateY(100%)', opacity: '0%'},
+          '80%': {transform: 'translateY(-5%)', opacity: '100%'},
+          '90%': {transform: 'translateY(3%)'},
+          '100%': {transform: 'translateY(0%)'}
+        }
+      },
+      animation:{
+        appear: 'appear 0.2s linear'
       }
     },
   },

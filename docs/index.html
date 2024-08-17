@@ -9,10 +9,10 @@
 </head>
 
 <body class=" overflow-hidden  w-full bg-slate-900 text-white " id="body">
-    <div class="grid grid-rows-layoutPassive h-dvh  w-full" id="layout">
+    <div class="grid grid-rows-layoutPassive h-dvh justify-center w-full" id="layout">
         <section id="title_section" class="flex flex-col justify-center self-end w-full justify-self-center px-4 mt-1">
             <h1 class="block " id="youtube_link_title">Paste a link here:</h1>
-            <div class="flex w-full justify-center"  >
+            <div class="flex w-full justify-center">
                 <input id="youtube_link" type="text" class="text-black mr-4 grow text-2xl bg-slate-700 text-white">
                 <button id="youtube_link_btn" class="border-solid border-white border-2 px-4 rounded-md font-bold 
             bg-gradient-to-r from-purple-500 to-pink-500">TAP</button>
@@ -22,7 +22,7 @@
             <div id="player"></div>
             <div id="menu" class="flex justify-center items-center p-2 ">
 
-                <div id="controls">
+                <div id="controls" class="flex flex-wrap">
 
                 </div>
             </div>
@@ -114,7 +114,7 @@
             startLabel.setAttribute('for', `startBtn${idExtender}`)
             addClass(startLabel, "w-[2em] h-[2em] bg-playButton bg-cover bg-no-repeat bg-center")
             startLabel.style.filter = "brightness(0) saturate(100%) invert(96%) sepia(27%) saturate(5690%) hue-rotate(67deg) brightness(98%) contrast(93%)"
-            startBtn.id = 'startBtn'+idExtender
+            startBtn.id = 'startBtn' + idExtender
             startBtn.setAttribute('type', 'radio')
             startBtn.setAttribute('name', 'timestamp_controls')
 
@@ -124,7 +124,7 @@
             pauseLabel.setAttribute('for', `pauseBtn${idExtender}`)
             addClass(pauseLabel, "w-[2em] h-[2em] bg-stopButton bg-cover bg-no-repeat bg-center")
             pauseLabel.style.filter = " brightness(0) saturate(100%) invert(40%) sepia(77%) saturate(1186%) hue-rotate(320deg) brightness(101%) contrast(88%)"
-            pauseBtn.id = 'pauseBtn'+idExtender
+            pauseBtn.id = 'pauseBtn' + idExtender
             pauseBtn.setAttribute('type', 'radio')
             pauseBtn.setAttribute('name', 'timestamp_controls')
 
@@ -143,7 +143,7 @@
 
 
             //adding styles to elements
-            addClass(newTimestamp, ' flex gap-2 mt-2 h-[5em] w-full text-lg font-bold border-solid border-2 border-white p-2 rounded-md')
+            addClass(newTimestamp, 'animate-appear flex gap-2 mt-2 h-[5em] w-full text-lg font-bold border-solid border-2 border-white p-2 rounded-md')
             addClass(timestampName, ' shrink w-full text-3xl bg-transparent border-none justify-self-start')
             addClass(radioGroup, 'flex justify-end items-center')
             addClass(startBtn, 'hidden')
@@ -168,17 +168,18 @@
                 const list = [...timestampList.children]
                 player.seekTo(currentTime)
                 player.playVideo()
+                //disabling other active play-buttons on current button press
                 list.map((t) => {
-                    if(t.id != `timestamp${idExtender}`){
+                    if (t.id != `timestamp${idExtender}`) {
                         const tlist = [...t.children]
-                        tlist.map((tc)=>{
-                            if(tc.nodeName == 'FIELDSET'){
+                        tlist.map((tc) => {
+                            if (tc.nodeName == 'FIELDSET') {
                                 const tclist = [...tc.children]
                                 tclist.map((tcc) => {
-                                    if(JSON.stringify(tcc.htmlFor)?.includes('startBtn')){
+                                    if (JSON.stringify(tcc.htmlFor)?.includes('startBtn')) {
                                         removeClass(tcc, 'hidden')
                                         addClass(tcc, 'block')
-                                    }else if(JSON.stringify(tcc.htmlFor)?.includes('pauseBtn')){
+                                    } else if (JSON.stringify(tcc.htmlFor)?.includes('pauseBtn')) {
                                         removeClass(tcc, 'block')
                                         addClass(tcc, 'hidden')
                                     }
@@ -256,15 +257,141 @@
             addClass(addTimestampBtn, 'block')
             //POPULATING PLAYBACK RATE BUTTONS
             const playbackRateList = player.getAvailablePlaybackRates()
+
             controls.innerHTML = ""
+            const setPlaybackBg = (newPbrLabel, pbrString) => {
+
+                switch (pbrString) {
+                    case 'x0.25': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-sky-500')
+                        break
+                    }
+                    case 'x0.5': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-cyan-500')
+                        break
+                    }
+                    case 'x0.75': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-teal-500')
+                        break
+                    }
+                    case 'x1': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-emerald-500')
+                        break
+                    }
+                    case 'x1.25': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-lime-500')
+                        break
+                    }
+                    case 'x1.5': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-yellow-500')
+                        break
+                    }
+                    case 'x1.75': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-orange-500')
+                        break
+                    }
+                    case 'x2': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-red-500')
+                        break
+                    }
+                    case 'default': {
+                        removeClass(newPbrLabel, 'bg-transparent')
+                        addClass(newPbrLabel, 'bg-transparent')
+                        break
+                    }
+                }
+            }
+            const removeAllPlaybackBg = (inputId) => {
+                const colorList = ['bg-sky-500', 'bg-cyan-500', 'bg-teal-500', 'bg-emerald-500', 'bg-lime-500', 'bg-yellow-500', 'bg-orange-500', 'bg-red-500']
+                const labelList = [...controls.children].filter((c) => c.nodeName == 'LABEL').filter((l) => l.htmlFor != inputId)
+                console.log(labelList)
+                labelList.forEach((l) => {
+                    switch (l.textContent) {
+                        case 'x0.25': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-sky-500')
+                            break
+                        }
+                        case 'x0.5': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-cyan-500')
+                            break
+                        }
+                        case 'x0.75': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-teal-500')
+                            break
+                        }
+                        case 'x1': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-emerald-500')
+                            break
+                        }
+                        case 'x1.25': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-lime-500')
+                            break
+                        }
+                        case 'x1.5': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-yellow-500')
+                            break
+                        }
+                        case 'x1.75': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-orange-500')
+                            break
+                        }
+                        case 'x2': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-red-500')
+                            break
+                        }
+                        case 'default': {
+                            addClass(l, 'bg-transparent')
+                            removeClass(l, 'bg-transparent')
+                            break
+                        }
+                    }
+                })
+            }
             playbackRateList.map((pbr) => {
-                const newPbrBtn = document.createElement('button')
-                newPbrBtn.textContent = `x${pbr}`
+                const idExtender = Math.floor(Math.random() * (500000 - 0) + 0)
+                const newPbrBtn = document.createElement('input')
+                newPbrBtn.setAttribute('type', 'radio')
+                newPbrBtn.setAttribute('name', 'playbackRadioGroup')
+                newPbrBtn.id = `pbrBtn${idExtender}`
+                newPbrBtn.value = `x${pbr}`
+                const newPbrLabel = document.createElement('label')
+                newPbrLabel.textContent = `x${pbr}`
+                newPbrLabel.setAttribute('for', `pbrBtn${idExtender}`)
+
+                addClass(newPbrBtn, 'hidden')
+                addClass(newPbrLabel, 'sm:p-3 p-2 mx-1 border-2 border-solid border-white rounded-md')
+
+
                 newPbrBtn.addEventListener('click', () => {
                     player.setPlaybackRate(pbr)
+                    const controlsList = [...controls.children]
+                    const inputList = controlsList.filter((c) => c.nodeName == 'INPUT')
+                    removeAllPlaybackBg(newPbrBtn.id)
+                    setPlaybackBg(newPbrLabel, `x${pbr}`)
+
+
                 })
-                addClass(newPbrBtn, 'p-3 mx-1 border-2 border-solid border-white rounded-md')
+
+                addClass(newPbrLabel, 'p-3 mx-1 border-2 border-solid border-white rounded-md ')
+                console.log(`fired`)
                 controls.appendChild(newPbrBtn)
+                controls.appendChild(newPbrLabel)
             })
 
         }
