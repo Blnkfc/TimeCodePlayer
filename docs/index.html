@@ -9,6 +9,56 @@
 </head>
 
 <body class=" overflow-hidden  w-full bg-slate-900 text-white " id="body">
+    <header class=" flex justify-end items-center  bg-slate-700 " >
+        <div id="instructions-bg" class="instructions-bg translate-y-1/2 items-center justify-center text-3xl  flex flex-wrap absolute w-full h-full bg-black opacity-85" >➚Instructions</div>
+        <img src="	https://i.imgur.com/EmiY4WT.png" alt="Get Help"
+        id="toggle-instructions" class=" w-[2em] h-[2em] rounded-full p-4 bg-slate-700 text-3xl z-10 bg-cover" ></img>
+        <img src="	https://cdn-icons-png.flaticon.com/512/7782/7782775.png" alt="Close"
+        id="close-instructions" class="hidden w-[2em] h-[2em] rounded-full p-4 bg-slate-700 text-3xl z-10 bg-cover">
+        <div id="instructions-page" class=" absolute w-full h-dvh hidden translate-y-1/2 bg-slate-800 " >
+            <details class="bg-slate-900 text-lg " >
+                <summary  class="bg-slate-700 text-2xl py-4 ">Getting started.</summary>
+                <p >Paste the link into dedicated field</p>
+                <img src="https://i.imgur.com/LYRdDzp.jpeg" alt="Link field">
+            </details>
+            <details class="bg-slate-900" >
+                <summary class="bg-slate-700 text-2xl py-4  " >Controls.</summary>
+                <p class="bg-slate-900" > - To add new timecode, skip to the needed timecode, it will be your starting point.</p>
+                <img src="https://i.imgur.com/Qd17l0b.jpeg" alt="Skipping video">
+                <br>
+                <p> - Press the big button to add new timecode</p>
+                <img src="https://i.imgur.com/XKHDkS9.jpeg" alt="Press big button">
+                <br>
+                <p> - Change the speed using smaller buttons, current speed will have a distinct background. </p>
+                <img src="https://i.imgur.com/lVplUif.jpeg" alt="Speed controls">
+            </details>
+            <details class="bg-slate-900" >
+                <summary class="bg-slate-700 text-2xl py-4  " >Working with timecodes.</summary>
+                <p> - After pressing the big button, new timecode will be created with default name being the staring point.</p>
+                <img src="https://i.imgur.com/ZUaVglE.jpeg" alt="Timecode created"> 
+                <br>
+                <p> - The name can be changed if you click on it, and type desired name.</p>
+                <img src="https://i.imgur.com/E1h4JA4.jpeg" alt="Name cahnged">  
+                <br>
+                <p> - Big red bin will delete the timecode.</p>
+                <img src="https://i.imgur.com/2OXEBKV.jpeg" alt="Deleting the timecode">
+                <br>
+                <p> - Green arrow will ONLY start the video from STARTING POINT that you chose (Watch [Controls: Adding new timecode]). After pressing the arrow it will switch with stop button.</p>
+                <p>Starting from random point in the video:</p>
+                <img src="https://i.imgur.com/GZjvUdf.jpeg" alt="Random video moment">
+                <br>
+                <p> - After pressing the green arrow on time code, automatically started from the chosen point:</p>
+                <img src="https://i.imgur.com/QQcY86C.jpeg" alt="Pressed the green arrow">
+                <br>
+                <p> - Red square will pause the video and switch to green arrow button (keep in mind, it will NOT start the video from the current time, ONLY from the timecode). </p>
+                <p>Video playing:</p>
+                <img src="https://i.imgur.com/tYckPag.jpeg" alt="Plying video">
+                <br>
+                <p>After pressing the square button:</p>
+                <img src="https://i.imgur.com/0cAQq7f.jpeg" alt="Stopped playing">
+            </details>
+        </div>
+    </header>
     <div class="grid grid-rows-layoutPassive h-dvh justify-center w-full" id="layout">
         <section id="title_section"
             class="flex flex-col justify-center self-end w-[100%] sm:w-full sm:justify-self-center px-4 mt-1">
@@ -22,15 +72,15 @@
         </section>
         <section id="player-section" class="flex flex-col items-center w-[95%] sm:w-full ">
             <div id="player"></div>
-            <div id="menu" class="flex justify-center items-center p-2 ">
+            <div id="menu" class="flex justify-center items-center p-2 gap-4 ">
 
-                <div id="controls" class="flex flex-wrap">
+                <div id="controls" class="flex flex-wrap shrink-[10] ">
 
                 </div>
             </div>
         </section>
         <section id="timestamps"
-            class=" w-[95%] sm:w-full h-full scrollbar-thin scrollbar-thumb-custom-scrollThumb scrollbar-thumb-rounded-full scrollbar-track-custom-scrollBg overflow-x-hidden overflow-y-auto">
+            class=" flex flex-col items-center w-full sm:w-full h-full scrollbar-thin scrollbar-thumb-custom-scrollThumb scrollbar-thumb-rounded-full scrollbar-track-custom-scrollBg overflow-x-hidden overflow-y-auto">
             <!-- Timstamps list will go there -->
 
         </section>
@@ -48,6 +98,38 @@
             var match = url.match(regExp);
             return (match && match[7].length == 11) ? match[7] : false;
         }
+
+        const instructionsBg = document.getElementById('instructions-bg')
+        instructionsBg.addEventListener('click', () => {
+            addClass(instructionsBg, 'hidden')
+            removeClass(instructionsBg, 'flex')
+        })
+        const instructions = document.getElementById('instructions-page')
+        const instructionsToggleBtn = document.getElementById('toggle-instructions')
+        const instructionsCloseBtn = document.getElementById('close-instructions')
+        instructionsToggleBtn.addEventListener('click', () => {
+            addClass(instructionsBg, 'hidden')
+            removeClass(instructionsBg, 'flex')
+            addClass(instructions, 'flex flex-col')
+            removeClass(instructions, 'hidden')
+            addClass(instructionsToggleBtn, 'hidden')
+            removeClass(instructionsToggleBtn, 'block')
+            addClass(instructionsCloseBtn, 'block')
+            removeClass(instructionsCloseBtn, 'hidden')
+        })
+        
+        instructionsCloseBtn.addEventListener('click', () =>{
+            addClass(instructionsCloseBtn, 'hidden')
+            removeClass(instructionsCloseBtn, 'block')
+            addClass(instructionsToggleBtn, 'block')
+            removeClass(instructionsToggleBtn, 'hidden')
+            addClass(instructions, 'hidden')
+            removeClass(instructions, 'flex flex-col')
+        })
+
+
+
+
 
         var tag = document.createElement('script');
         const timestampList = document.getElementById('timestamps')
